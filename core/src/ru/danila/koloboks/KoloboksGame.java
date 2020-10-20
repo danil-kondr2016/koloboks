@@ -17,7 +17,8 @@ public class KoloboksGame extends ApplicationAdapter {
 		for (int i = 0; i < koloboks.length; i++)
 			koloboks[i] = new Kolobok(MathUtils.random(Gdx.graphics.getWidth()),
 					                  MathUtils.random(Gdx.graphics.getHeight()),
-					                  MathUtils.randomSign(), MathUtils.randomSign()*2);
+					                  MathUtils.random(-2f, 2f),
+					                  MathUtils.random(-2f, 2f));
 	}
 
 	@Override
