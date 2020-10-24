@@ -7,8 +7,8 @@ import ru.danila.koloboks.KoloboksGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 1280;
-		config.height = 720;
+		config.width = KoloboksGame.SCR_WIDTH;
+		config.height = KoloboksGame.SCR_HEIGHT;
 		new LwjglApplication(new KoloboksGame(), config);
 	}
 }
