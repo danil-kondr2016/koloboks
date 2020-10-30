@@ -18,11 +18,16 @@ public class KoloboksGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		for (int i = 0; i < gameobjs.length; i++)
-			gameobjs[i] = new GameObject(MathUtils.random(SCR_WIDTH - GameObject.IMG_WIDTH),
-					                     MathUtils.random(SCR_HEIGHT - GameObject.IMG_HEIGHT),
-					                     MathUtils.random(-2f, 2f),
-					                     MathUtils.random(-2f, 2f));
+		for (int i = 0; i < gameobjs.length; i++) {
+			int img_size = MathUtils.random(8,64);
+			gameobjs[i] = new GameObject(
+					MathUtils.random(SCR_WIDTH - img_size),
+					MathUtils.random(SCR_HEIGHT - img_size),
+					MathUtils.random(-2f, 2f),
+					MathUtils.random(-2f, 2f),
+					img_size, img_size
+			);
+		}
 
 		bg = new Texture("stars2.png");
 	}
