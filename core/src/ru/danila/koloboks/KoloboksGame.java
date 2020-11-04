@@ -13,14 +13,25 @@ public class KoloboksGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture bg;
 
-	GameObject[] gameobjs = new GameObject[25];
+	Kolobok[] koloboks = new Kolobok[25];
+	Mutant1[] mutant1s = new Mutant1[15];
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		for (int i = 0; i < gameobjs.length; i++) {
+		for (int i = 0; i < koloboks.length; i++) {
 			int img_size = MathUtils.random(8,64);
-			gameobjs[i] = new GameObject(
+			koloboks[i] = new Kolobok(
+					MathUtils.random(SCR_WIDTH - img_size),
+					MathUtils.random(SCR_HEIGHT - img_size),
+					MathUtils.random(-2f, 2f),
+					MathUtils.random(-2f, 2f),
+					img_size, img_size
+			);
+		}
+		for (int i = 0; i < mutant1s.length; i++) {
+			int img_size = MathUtils.random(6,48);
+			mutant1s[i] = new Mutant1(
 					MathUtils.random(SCR_WIDTH - img_size),
 					MathUtils.random(SCR_HEIGHT - img_size),
 					MathUtils.random(-2f, 2f),
@@ -38,18 +49,24 @@ public class KoloboksGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		batch.draw(bg, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-		for (int i = 0; i < gameobjs.length; i++)
-			gameobjs[i].draw(batch);
+		for (int i = 0; i < koloboks.length; i++)
+			koloboks[i].draw(batch);
+		for (int i = 0; i < mutant1s.length; i++)
+			mutant1s[i].draw(batch);
 		batch.end();
-		for (int i = 0; i < gameobjs.length; i++)
-			gameobjs[i].move();
+		for (int i = 0; i < koloboks.length; i++)
+			koloboks[i].move();
+		for (int i = 0; i < mutant1s.length; i++)
+			mutant1s[i].move();
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		for (int i = 0; i < gameobjs.length; i++)
-			gameobjs[i].dispose();
+		for (int i = 0; i < koloboks.length; i++)
+			koloboks[i].dispose();
+		for (int i = 0; i < mutant1s.length; i++)
+			mutant1s[i].dispose();
 		bg.dispose();
 	}
 }
