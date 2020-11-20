@@ -23,6 +23,7 @@ public class Mutant1 extends Kolobok {
     }
 
     public void draw(SpriteBatch batch) {
+        if (isAlive)
         batch.draw(img, this.x, this.y, this.img_width/2f, this.img_height/2f,
                 this.img_width, this.img_height, 1, 1, this.angle, 0, 0, this.img.getWidth(), this.img.getHeight(),
                 false, false);

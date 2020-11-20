@@ -16,6 +16,9 @@ public class Kolobok implements Disposable {
 
     Texture img;
 
+    int hitCount = 0;
+    boolean isAlive = true;
+
     Kolobok(float x, float y, float dx, float dy, int w, int h) {
         this.x = x;
         this.y = y;
@@ -40,7 +43,12 @@ public class Kolobok implements Disposable {
         this.angle += this.da;
     }
 
+    public boolean isHit(float x, float y) {
+        return (x >= this.x && x <= this.x+this.img_width && y >= this.y && y <= this.y+this.img_height);
+    }
+
     public void draw(SpriteBatch batch) {
+        if (isAlive)
         batch.draw(img, this.x, this.y, this.img_width/2f, this.img_height/2f,
                 this.img_width, this.img_height, 1, 1, this.angle, 0, 0, this.img.getWidth(), this.img.getHeight(),
                 false, false);

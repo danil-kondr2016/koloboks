@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class KoloboksGame extends ApplicationAdapter {
 	public static final int SCR_WIDTH = 1280;
@@ -18,13 +20,14 @@ public class KoloboksGame extends ApplicationAdapter {
 	OrthographicCamera camera;
 	SpriteBatch batch;
 	Texture bg;
+	Texture imgExplosion;
 
 	BitmapFont font;
 
 	Kolobok[] koloboks = new Kolobok[25];
 	Mutant1[] mutant1s = new Mutant1[15];
 
-	int nClick = 0;
+	int score = 0;
 
 	@Override
 	public void create () {
@@ -32,7 +35,7 @@ public class KoloboksGame extends ApplicationAdapter {
 		camera.setToOrtho(false, SCR_WIDTH, SCR_HEIGHT);
 		batch = new SpriteBatch();
 		for (int i = 0; i < koloboks.length; i++) {
-			int img_size = MathUtils.random(8,64);
+			int img_size = MathUtils.random(32,64);
 			koloboks[i] = new Kolobok(
 					MathUtils.random(SCR_WIDTH - img_size),
 					MathUtils.random(SCR_HEIGHT - img_size),
@@ -42,7 +45,7 @@ public class KoloboksGame extends ApplicationAdapter {
 			);
 		}
 		for (int i = 0; i < mutant1s.length; i++) {
-			int img_size = MathUtils.random(6,48);
+			int img_size = MathUtils.random(24,48);
 			mutant1s[i] = new Mutant1(
 					MathUtils.random(SCR_WIDTH - img_size),
 					MathUtils.random(SCR_HEIGHT - img_size),
@@ -53,6 +56,7 @@ public class KoloboksGame extends ApplicationAdapter {
 		}
 
 		bg = new Texture("stars2.png");
+		imgExplosion = new Texture("explosion.png");
 
 		FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(
 				Gdx.files.internal("dejavu.ttf")
@@ -74,7 +78,27 @@ public class KoloboksGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		if (Gdx.input.justTouched()) {
-			nClick++;
+			Vector3 pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+			camera.unproject(pos);
+			for (int i = 0; i < koloboks.length; i++) {
+				if (koloboks[i].isHit(pos.x, pos.y)) {
+					koloboks[i].hitCount++;
+					if (koloboks[i].hitCount >= 1) {
+						koloboks[i].isAlive = false;
+						score++;
+					}
+				}
+			}
+
+			for (int i = 0; i < mutant1s.length; i++) {
+				if (mutant1s[i].isHit(pos.x, pos.y)) {
+					mutant1s[i].hitCount++;
+					if (mutant1s[i].hitCount >= 2) {
+						mutant1s[i].isAlive = false;
+						score += 2;
+					}
+				}
+			}
 		}
 
 		camera.update();
@@ -86,9 +110,15 @@ public class KoloboksGame extends ApplicationAdapter {
 		for (int i = 0; i < mutant1s.length; i++)
 			mutant1s[i].draw(batch);
 
+		if (Gdx.input.isTouched()) {
+			Vector3 pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+			camera.unproject(pos);
+			batch.draw(imgExplosion, pos.x-50, pos.y-50, 100, 100);
+		}
+
 		font.setColor(Color.WHITE);
-		if (nClick > 0) {
-			font.draw(batch, String.valueOf(nClick), 100, 100);
+		if (score > 0) {
+			font.draw(batch, String.valueOf(score), 100, 100);
 		}
 
 		batch.end();
