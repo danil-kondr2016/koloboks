@@ -2,6 +2,7 @@ package ru.danila.koloboks;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -21,6 +22,8 @@ public class KoloboksGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture bg;
 	Texture imgExplosion;
+
+	Sound sndExplosion, sndShot;
 
 	BitmapFont font;
 
@@ -55,6 +58,8 @@ public class KoloboksGame extends ApplicationAdapter {
 			);
 		}
 
+		sndExplosion = Gdx.audio.newSound(Gdx.files.internal("explode.wav"));
+		sndShot = Gdx.audio.newSound(Gdx.files.internal("shot.wav"));
 		bg = new Texture("stars2.png");
 		imgExplosion = new Texture("explosion.png");
 
@@ -85,6 +90,7 @@ public class KoloboksGame extends ApplicationAdapter {
 					koloboks[i].hitCount++;
 					if (koloboks[i].hitCount >= 1) {
 						koloboks[i].isAlive = false;
+						sndExplosion.play();
 						score++;
 					}
 				}
@@ -95,6 +101,7 @@ public class KoloboksGame extends ApplicationAdapter {
 					mutant1s[i].hitCount++;
 					if (mutant1s[i].hitCount >= 2) {
 						mutant1s[i].isAlive = false;
+						sndExplosion.play();
 						score += 2;
 					}
 				}
@@ -116,6 +123,9 @@ public class KoloboksGame extends ApplicationAdapter {
 			batch.draw(imgExplosion, pos.x-50, pos.y-50, 100, 100);
 		}
 
+		if (Gdx.input.justTouched())
+			sndShot.play();
+
 		font.setColor(Color.WHITE);
 		if (score > 0) {
 			font.draw(batch, String.valueOf(score), 100, 100);
@@ -136,5 +146,8 @@ public class KoloboksGame extends ApplicationAdapter {
 		for (int i = 0; i < mutant1s.length; i++)
 			mutant1s[i].dispose();
 		bg.dispose();
+		imgExplosion.dispose();
+		sndExplosion.dispose();
+		sndShot.dispose();
 	}
 }
