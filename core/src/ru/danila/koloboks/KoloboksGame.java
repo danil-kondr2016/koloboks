@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class KoloboksGame extends ApplicationAdapter {
 	public static final int SCR_WIDTH = 1280;
@@ -31,6 +32,7 @@ public class KoloboksGame extends ApplicationAdapter {
 	Mutant1[] mutant1s = new Mutant1[15];
 
 	int score = 0;
+	long startTime;
 
 	@Override
 	public void create () {
@@ -75,6 +77,8 @@ public class KoloboksGame extends ApplicationAdapter {
 		parameter.color = Color.WHITE;
 		font = fontGenerator.generateFont(parameter);
 		fontGenerator.dispose();
+
+		startTime = TimeUtils.millis();
 	}
 
 	@Override
@@ -130,6 +134,12 @@ public class KoloboksGame extends ApplicationAdapter {
 		if (score > 0) {
 			font.draw(batch, String.valueOf(score), 100, 100);
 		}
+
+		long time = TimeUtils.millis();
+		long s = (time / 1000) % 60;
+		long m = ((time / 1000) / 60) % 60;
+
+		font.draw(batch, String.format("%02d:%02d", m,s), 100, 700);
 
 		batch.end();
 		for (int i = 0; i < koloboks.length; i++)
