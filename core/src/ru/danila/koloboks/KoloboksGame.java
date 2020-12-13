@@ -135,11 +135,11 @@ public class KoloboksGame extends ApplicationAdapter {
 			font.draw(batch, String.valueOf(score), 100, 100);
 		}
 
-		long time = TimeUtils.millis();
+		long time = TimeUtils.millis()-startTime;
 		long s = (time / 1000) % 60;
 		long m = ((time / 1000) / 60) % 60;
 
-		font.draw(batch, String.format("%02d:%02d", m,s), 100, 700);
+		font.draw(batch, String.format("%d:%02d", m,s), 100, 700);
 
 		batch.end();
 		for (int i = 0; i < koloboks.length; i++)
